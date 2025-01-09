@@ -1,0 +1,54 @@
+&CONTROL
+  calculation = 'md'
+  restart_mode = 'from_scratch'
+  outdir = './out/'
+  pseudo_dir = './pseudo/'
+  prefix = 'si_au3'
+  dt = 10.0  ! Time step in atomic units (~0.242 fs)
+  nstep = 10  ! Number of steps
+/
+&SYSTEM
+  ibrav = 0
+  nat = 16
+  ntyp = 2
+  ecutwfc = 45
+  ecutrho = 240
+  occupations = 'smearing'
+  smearing = 'cold'
+  degauss = 0.02
+/
+&ELECTRONS
+  conv_thr = 1.0d-8
+/
+&IONS
+  ion_temperature = 'rescale-T'
+  tempw = 300
+  delta_t = 1.2
+  nraise = 10
+/
+ATOMIC_SPECIES
+Au  196.966569  Au_ONCV_PBEsol-1.0.upf
+Si  28.0855     Si.pbesol-n-rrkjus_psl.1.0.0.UPF
+ATOMIC_POSITIONS crystal
+Si            0.0000000000        0.0000000000        0.0000000000
+Si            0.0000000000        0.5000000000        0.5000000000
+Si            0.5000000000        0.0000000000        0.5000000000
+Si            0.5000000000        0.5000000000        0.0000000000
+Au            0.2499999856        0.7500000144        0.7500000144
+Au            0.2499999856        0.2499999856        0.7500000144
+Au            0.5000000000        0.0000000000        0.0000000000
+Au            0.2499999856        0.2499999856        0.2499999856
+Au            0.2499999856        0.7500000144        0.2499999856
+Au            0.5000000000        0.5000000000        0.5000000000
+Au            0.7500000144        0.7500000144        0.2499999856
+Au            0.7500000144        0.2499999856        0.2499999856
+Au            0.0000000000        0.0000000000        0.5000000000
+Au            0.7500000144        0.2499999856        0.7500000144
+Au            0.7500000144        0.7500000144        0.7500000144
+Au            0.0000000000        0.5000000000        0.0000000000
+K_POINTS automatic
+3 3 3 0 0 0
+CELL_PARAMETERS angstrom
+6.5714680000  0.0000000000  0.0000000000
+0.0000000000  6.5714680000  0.0000000000
+0.0000000000  0.0000000000  6.5714680000
