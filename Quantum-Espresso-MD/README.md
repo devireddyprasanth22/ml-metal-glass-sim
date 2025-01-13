@@ -9,3 +9,5 @@ To run on setonix, here are the steps:
 2. `module load quantum-espresso/7.2`
 3. `srun -n 32 pw.x < input file &> output file &`
 4. `tail -f output file`
+
+Before the runs, make sure pseudo and the input file is in the same dir
