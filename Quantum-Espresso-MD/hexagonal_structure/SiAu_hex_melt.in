@@ -1,0 +1,55 @@
+&CONTROL
+  calculation = 'vc-md'
+  etot_conv_thr =   8.0000000000d-05
+  forc_conv_thr =   1.0000000000d-04
+  outdir = './out/'
+  prefix = 'siau_relax'
+  pseudo_dir = './pseudo/'
+  tprnfor = .true.
+  tstress = .true.
+  restart_mode = 'from_scratch'
+  dt = 20.0
+  nstep=100
+/
+&SYSTEM
+  degauss =   2.0000000000d-02
+  ecutrho =   2.4000000000d+02
+  ecutwfc =   4.5000000000d+01
+  ibrav = 0
+  nat = 8
+  nosym = .TRUE.
+  ntyp = 2
+  occupations = 'smearing'
+  smearing = 'cold'
+/
+&ELECTRONS
+  conv_thr =   1.6000000000d-09
+  electron_maxstep = 80
+  mixing_beta =   4.0000000000d-01
+/
+&IONS
+  ion_temperature = 'initial'
+  ion_dynamics = 'beeman'
+  tempw = 2000
+/
+&CELL
+  cell_dynamics = 'pr'
+/
+ATOMIC_SPECIES
+Au     196.966569 Au_ONCV_PBEsol-1.0.upf
+Si     28.0855 Si.pbesol-n-rrkjus_psl.1.0.0.UPF
+ATOMIC_POSITIONS (crystal)
+Si            0.6666666700        0.3333333300        0.2500000000
+Si            0.3333333300        0.6666666700        0.7500000000
+Au            0.3365774849        0.1682887424        0.7500000000
+Au            0.8317112576        0.1682887424        0.7500000000
+Au            0.8317112576        0.6634225151        0.7500000000
+Au            0.6634225151        0.8317112576        0.2500000000
+Au            0.1682887424        0.8317112576        0.2500000000
+Au            0.1682887424        0.3365774849        0.2500000000
+K_POINTS automatic
+3 3 3 0 0 0
+CELL_PARAMETERS angstrom
+      5.8362682800       0.0000000000       0.0000000000
+     -2.9181341400       5.0543565938       0.0000000000
+      0.0000000000       0.0000000000       4.7393460000
