@@ -1,11 +1,16 @@
 &CONTROL
-  calculation = 'md'
+  calculation = 'vc-md'
+  etot_conv_thr =   8.0000000000d-05
+  forc_conv_thr =   1.0000000000d-04
   restart_mode = 'from_scratch'
   outdir = './out/'
   pseudo_dir = './pseudo/'
   prefix = 'si_au3'
-  dt = 10.0  ! Time step in atomic units (~0.242 fs)
-  nstep = 10  ! Number of steps
+  tprnfor = .true.
+  tstress = .true.
+  restart_mode = 'from_scratch'
+  dt = 20.0
+  nstep=50
 /
 &SYSTEM
   ibrav = 0
@@ -16,35 +21,40 @@
   occupations = 'smearing'
   smearing = 'cold'
   degauss = 0.02
+  nosym = .TRUE.
 /
 &ELECTRONS
-  conv_thr = 1.0d-8
+  conv_thr =   1.6000000000d-09
+  electron_maxstep = 80
+  mixing_beta =   4.0000000000d-01
 /
 &IONS
-  ion_temperature = 'rescale-T'
-  tempw = 300
-  delta_t = 1.2
-  nraise = 10
+  ion_temperature = 'initial'
+  ion_dynamics = 'beeman'
+  tempw = 2000
+/
+&CELL
+  cell_dynamics = 'pr'
 /
 ATOMIC_SPECIES
 Au  196.966569  Au_ONCV_PBEsol-1.0.upf
 Si  28.0855     Si.pbesol-n-rrkjus_psl.1.0.0.UPF
-ATOMIC_POSITIONS crystal
+ATOMIC_POSITIONS (crystal)
 Si            0.0000000000        0.0000000000        0.0000000000
 Si            0.0000000000        0.5000000000        0.5000000000
 Si            0.5000000000        0.0000000000        0.5000000000
 Si            0.5000000000        0.5000000000        0.0000000000
-Au            0.2499999856        0.7500000144        0.7500000144
-Au            0.2499999856        0.2499999856        0.7500000144
+Au            0.2500000227        0.7499999773        0.7499999773
+Au            0.2500000227        0.2500000227        0.7499999773
 Au            0.5000000000        0.0000000000        0.0000000000
-Au            0.2499999856        0.2499999856        0.2499999856
-Au            0.2499999856        0.7500000144        0.2499999856
+Au            0.2500000227        0.2500000227        0.2500000227
+Au            0.2500000227        0.7499999773        0.2500000227
 Au            0.5000000000        0.5000000000        0.5000000000
-Au            0.7500000144        0.7500000144        0.2499999856
-Au            0.7500000144        0.2499999856        0.2499999856
+Au            0.7499999773        0.7499999773        0.2500000227
+Au            0.7499999773        0.2500000227        0.2500000227
 Au            0.0000000000        0.0000000000        0.5000000000
-Au            0.7500000144        0.2499999856        0.7500000144
-Au            0.7500000144        0.7500000144        0.7500000144
+Au            0.7499999773        0.2500000227        0.7499999773
+Au            0.7499999773        0.7499999773        0.7499999773
 Au            0.0000000000        0.5000000000        0.0000000000
 K_POINTS automatic
 3 3 3 0 0 0
