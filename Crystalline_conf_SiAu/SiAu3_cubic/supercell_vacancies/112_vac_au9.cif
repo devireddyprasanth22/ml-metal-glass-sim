@@ -1,0 +1,60 @@
+
+#======================================================================
+# CRYSTAL DATA
+#----------------------------------------------------------------------
+data_VESTA_phase_1
+
+_chemical_name_common                  'Si4 Au12'
+_cell_length_a                         6.571468
+_cell_length_b                         6.571468
+_cell_length_c                         13.142936
+_cell_angle_alpha                      90.000000
+_cell_angle_beta                       90.000000
+_cell_angle_gamma                      90.000000
+_cell_volume                           567.567035
+_space_group_name_H-M_alt              'P 1'
+_space_group_IT_number                 1
+
+loop_
+_space_group_symop_operation_xyz
+   'x, y, z'
+
+loop_
+   _atom_site_label
+   _atom_site_occupancy
+   _atom_site_fract_x
+   _atom_site_fract_y
+   _atom_site_fract_z
+   _atom_site_adp_type
+   _atom_site_U_iso_or_equiv
+   _atom_site_type_symbol
+   Si0        1.0     0.000000     0.000000     0.000000    Uiso  ? Si
+   Si0        1.0     0.000000     0.000000     0.500000    Uiso  ? Si
+   Si1        1.0     0.000000     0.500000     0.250000    Uiso  ? Si
+   Si1        1.0     0.000000     0.500000     0.750000    Uiso  ? Si
+   Si2        1.0     0.500000     0.000000     0.250000    Uiso  ? Si
+   Si2        1.0     0.500000     0.000000     0.750000    Uiso  ? Si
+   Si3        1.0     0.500000     0.500000     0.000000    Uiso  ? Si
+   Si3        1.0     0.500000     0.500000     0.500000    Uiso  ? Si
+   Au4        1.0     0.250000     0.750000     0.375000    Uiso  ? Au
+   Au4        1.0     0.250000     0.750000     0.875000    Uiso  ? Au
+   Au6        1.0     0.500000     0.000000     0.000000    Uiso  ? Au
+   Au6        1.0     0.500000     0.000000     0.500000    Uiso  ? Au
+   Au7        1.0     0.250000     0.250000     0.125000    Uiso  ? Au
+   Au7        1.0     0.250000     0.250000     0.625000    Uiso  ? Au
+   Au8        1.0     0.250000     0.750000     0.125000    Uiso  ? Au
+   Au8        1.0     0.250000     0.750000     0.625000    Uiso  ? Au
+   Au9        1.0     0.500000     0.500000     0.250000    Uiso  ? Au
+   Au9        1.0     0.500000     0.500000     0.750000    Uiso  ? Au
+   Au10       1.0     0.750000     0.750000     0.125000    Uiso  ? Au
+   Au10       1.0     0.750000     0.750000     0.625000    Uiso  ? Au
+   Au11       1.0     0.750000     0.250000     0.125000    Uiso  ? Au
+   Au11       1.0     0.750000     0.250000     0.625000    Uiso  ? Au
+   Au12       1.0     0.000000     0.000000     0.250000    Uiso  ? Au
+   Au12       1.0     0.000000     0.000000     0.750000    Uiso  ? Au
+   Au13       1.0     0.750000     0.250000     0.375000    Uiso  ? Au
+   Au13       1.0     0.750000     0.250000     0.875000    Uiso  ? Au
+   Au14       1.0     0.750000     0.750000     0.375000    Uiso  ? Au
+   Au14       1.0     0.750000     0.750000     0.875000    Uiso  ? Au
+   Au15       1.0     0.000000     0.500000     0.000000    Uiso  ? Au
+   Au15       1.0     0.000000     0.500000     0.500000    Uiso  ? Au
