@@ -16,14 +16,15 @@ def extract_final_atomic_positions(output_file_path):
     else:
         raise ValueError("No ATOMIC_POSITIONS block found in the file.")
 
-def update_input(input_file, positions, type,output_file):
+def update_input(input_file, type,new_input_file, output_file):
     with open(input_file, 'r') as file:
         content = file.read()
-        content = re.sub(
-            r"(ATOMIC_POSITIONS\s+\(.*?\)\n)([\s\S]+?)(?=K_POINTS|$)", 
-            f"\\1{positions}\n", 
-            content,
-        )
+    positions = extract_final_atomic_positions(output_file)
+    content = re.sub(
+        r"(ATOMIC_POSITIONS\s+\(.*?\)\n)([\s\S]+?)(?=K_POINTS|$)", 
+        f"\\1{positions}\n", 
+        content,
+    )
 # Update positions in input file
 # if vc-md (melt), change calculation and add dt = 20 and nstep = 100, change &IONS to temperature = 'initial', ion_dynamics = beeman, tempw = 2000 and add &CELL and change cell_dynamics - 'pr'
 # if md (quench), change ion_temp = 'reduce-T', delta_t = -34, nraise = 2, and remove &CELL
@@ -87,26 +88,19 @@ def update_input(input_file, positions, type,output_file):
     else:
         raise ValueError("Invalid type. Supported types are 'vc-md' (melt) and 'md' (quench).")
 
-    # Write to the output file
-    with open(output_file, 'w') as file:
+    # Write to the new input file
+    with open(new_input_file, 'w') as file:
         file.write(content)
 
 
 
-qe_output_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_relax.out"  
-try:
-    positions = extract_final_atomic_positions(qe_output_file)
-    print("Extracted Atomic Positions:")
-    print(positions)
-except ValueError as e:
-    print(f"Error: {e}")
-
+output_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_relax.out"  
 input_file_path = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_relax.in"  # Path to the QE input file
-output_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_melt_test.in"
+new_input_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_melt_test.in"
 type_of_calculation = "melt" 
 
 try:
-    update_input(input_file_path, positions, type_of_calculation,output_file)
+    update_input(input_file_path,type_of_calculation,new_input_file,output_file)
     print(f"QE input file updated for {type_of_calculation} calculation.")
 except ValueError as e:
     print(f"Error: {e}")
