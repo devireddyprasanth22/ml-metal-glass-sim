@@ -1,7 +1,9 @@
 import os
 
 import random
-
+"""
+Script for generating random vacancies in a cif file for creating more data
+"""
 def create_vacancy(input_file, output_file, num_vac):
     with open(input_file, 'r') as f:
         lines = f.readlines()
