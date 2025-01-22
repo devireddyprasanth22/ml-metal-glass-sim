@@ -43,7 +43,6 @@ def cif2qe(output_file, cell, atomic_positions, symbols, nat):
   pseudo_dir = './pseudo/'
   tprnfor = .true.
   tstress = .true.
-  verbosity = 'high'
 /
 &SYSTEM
   degauss =   2.7500000000d-02
@@ -60,6 +59,12 @@ def cif2qe(output_file, cell, atomic_positions, symbols, nat):
   conv_thr =   3.2000000000d-09
   electron_maxstep = 80
   mixing_beta =   4.0000000000d-01
+/
+&IONS
+  ion_dynamics = 'bfgs'
+/
+&CELL
+  cell_dynamics = 'bfgs'
 /
 ATOMIC_SPECIES
 Au     196.966569 Au_ONCV_PBEsol-1.0.upf
@@ -96,9 +101,9 @@ CELL_PARAMETERS angstrom
         file.write(formatted_template)
 
 if __name__ == "__main__":
+    # a for loop that will convert all cif files to output files in a dir
 
     cif_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/beta_lattice.cif"  
-    template_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/qe_input/SiAu3_112.in" 
     output_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/test.in"  
 
     cell, atomic_positions, symbols, nat = extract_cif_data(cif_file)
@@ -107,4 +112,3 @@ if __name__ == "__main__":
 
     print(f"QE input file updated: {output_file}")
 
-# print(extract_cif_data("/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/SiAu3.cif"))
