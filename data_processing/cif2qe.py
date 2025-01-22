@@ -1,57 +1,110 @@
 import os
 import re
 from ase.io import read
+import math
+
 """ Script for converting cif data to qe data from a template file of the given configuration"""
+
+def compute_cell_params(cell):
+    """convert from primitive cell to lattice coords"""
+    a = cell[0]
+    b = cell[1]
+    c = cell[2]
+    alpha_rad = math.radians(cell[3])
+    beta_rad = math.radians(cell[4])
+    gamma_rad = math.radians(cell[5])
+
+    ax, ay, az = a, 0, 0
+    bx, by, bz = b * math.cos(gamma_rad), b * math.sin(gamma_rad), 0
+    cx = c * math.cos(beta_rad)
+    cy = c * (math.cos(alpha_rad) - math.cos(beta_rad) * math.cos(gamma_rad)) / math.sin(gamma_rad)
+    cz = c * math.sqrt(1 - math.cos(beta_rad)**2 - ((math.cos(alpha_rad) - math.cos(beta_rad) * math.cos(gamma_rad)) / math.sin(gamma_rad))**2)
+
+    return [(ax, ay, az), (bx, by, bz), (cx, cy, cz)]
+
 def extract_cif_data(cif_file):
-    """Extracts atomic positions, cell parameters, and number of atoms from a CIF file."""
+    """extract data from cif file"""
     structure = read(cif_file)
-    cell = structure.cell
+    cell = structure.cell.cellpar()
     atomic_positions = structure.get_scaled_positions()
     symbols = structure.get_chemical_symbols()
     nat = len(symbols)
 
     return cell, atomic_positions, symbols, nat
 
-def cif2qe(template_file, output_file, cell, atomic_positions, symbols, nat):
-    with open(template_file, 'r') as file:
-        template = file.read()
+def cif2qe(output_file, cell, atomic_positions, symbols, nat):
+    template = """
+&CONTROL
+  calculation = 'vc-relax'
+  etot_conv_thr =   1.6000000000d-04
+  forc_conv_thr =   1.0000000000d-04
+  outdir = './out/'
+  prefix = 'aiida'
+  pseudo_dir = './pseudo/'
+  tprnfor = .true.
+  tstress = .true.
+  verbosity = 'high'
+/
+&SYSTEM
+  degauss =   2.7500000000d-02
+  ecutrho =   2.4000000000d+02
+  ecutwfc =   4.5000000000d+01
+  ibrav = 0
+  nat = {nat}
+  nosym = .false.
+  ntyp = 2
+  occupations = 'smearing'
+  smearing = 'cold'
+/
+&ELECTRONS
+  conv_thr =   3.2000000000d-09
+  electron_maxstep = 80
+  mixing_beta =   4.0000000000d-01
+/
+ATOMIC_SPECIES
+Au     196.966569 Au_ONCV_PBEsol-1.0.upf
+Si     28.0855 Si.pbesol-n-rrkjus_psl.1.0.0.UPF
+ATOMIC_POSITIONS crystal
+{atomic_positions}
+K_POINTS automatic
+2 2 2 0 0 0
+CELL_PARAMETERS angstrom
+{cell_parameters}
+"""
 
-    # Update nat
-    template = re.sub(r'(\bnat\s*=\s*)\d+', f'\\g<1>{nat}', template)
-
-     # Update ATOMIC_POSITIONS
+    # Format atomic positions
     atomic_positions_str = "\n".join(
         f"{symbols[i]}     {pos[0]:.10f}     {pos[1]:.10f}     {pos[2]:.10f}"
         for i, pos in enumerate(atomic_positions)
     )
-    template = re.sub(r'(ATOMIC_POSITIONS\s+crystal\n)([\s\S]+?)(\n\n|$)', f'\\1{atomic_positions_str}\\3', template)
-    
-    # update k-points (manually if not in template)
-    if "K_POINTS" not in template:
-        template += "\nK_POINTS automatic\n2 2 2 0 0 0\n"
-    
-    # Update CELL_PARAMETERS
-    cell_str = "\n".join(
-        f"      {cell[i][0]:.10f}       {cell[i][1]:.10f}       {cell[i][2]:.10f}" 
-        for i in range(3)
+
+    # Compute cell parameters
+    new_cell = compute_cell_params(cell)
+    cell_parameters_str = "\n".join(
+        f"      {v[0]:.10f}       {v[1]:.10f}       {v[2]:.10f}" for v in new_cell
     )
-    if "CELL_PARAMETERS" in template:
-        template = re.sub(r'(CELL_PARAMETERS\\s+angstrom\\n)([\\s\\S]+?)(\\n\\n|$)', f'\\1{cell_str}\\3', template)
-    else:
-        template += f"\nCELL_PARAMETERS angstrom\n{cell_str}\n"
-    
-    # Write the updated template to the output file
+
+    # Format the template
+    formatted_template = template.format(
+        nat=nat,
+        atomic_positions=atomic_positions_str,
+        cell_parameters=cell_parameters_str,
+    )
+
+    # Write to output file
     with open(output_file, 'w') as file:
-        file.write(template)
+        file.write(formatted_template)
 
 if __name__ == "__main__":
 
-    cif_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/SiAu3_odd_au_vac.cif"  # Path to your CIF file
-    template_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/qe_input/SiAu3.in"  # Path to your QE input template
-    output_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/test.in"  # Path to the output QE input file
+    cif_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/beta_lattice.cif"  
+    template_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/qe_input/SiAu3_112.in" 
+    output_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/test.in"  
 
     cell, atomic_positions, symbols, nat = extract_cif_data(cif_file)
 
-    cif2qe(template_file, output_file, cell, atomic_positions, symbols, nat)
+    cif2qe(output_file, cell, atomic_positions, symbols, nat)
 
     print(f"QE input file updated: {output_file}")
+
+# print(extract_cif_data("/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/SiAu3.cif"))

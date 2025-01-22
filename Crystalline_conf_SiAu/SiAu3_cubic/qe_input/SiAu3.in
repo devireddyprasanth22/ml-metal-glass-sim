@@ -1,5 +1,5 @@
 &CONTROL
-  calculation = 'scf'
+  calculation = 'vc-relax'
   etot_conv_thr =   1.6000000000d-04
   forc_conv_thr =   1.0000000000d-04
   outdir = './out/'
