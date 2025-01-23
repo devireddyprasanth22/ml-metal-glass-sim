@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/vacancies_siau3"
-OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/relaxation"
+INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/112_vacs"
+OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/112_vacs_in"
 PYTHON_SCRIPT="./cif2qe.py"
 
 mkdir -p "$OUTPUT_DIR"

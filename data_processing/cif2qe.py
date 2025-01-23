@@ -73,7 +73,7 @@ Si     28.0855 Si.pbesol-n-rrkjus_psl.1.0.0.UPF
 ATOMIC_POSITIONS crystal
 {atomic_positions}
 K_POINTS automatic
-2 2 2 0 0 0
+1 1 2 0 0 0
 CELL_PARAMETERS angstrom
 {cell_parameters}
 """

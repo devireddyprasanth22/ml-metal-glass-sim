@@ -1,9 +1,9 @@
 #!/bin/bash
 
-INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/test_siau3"
-OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/vacancies_siau3/"
+INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/SiAu3_112"
+OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/112_vacs"
 PYTHON_SCRIPT="./generate_vac.py"
-VAC_LOOP=5
+VAC_LOOP=31
 
 mkdir -p "$OUTPUT_DIR"
 
