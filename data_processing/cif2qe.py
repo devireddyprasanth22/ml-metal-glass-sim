@@ -32,7 +32,7 @@ def extract_cif_data(cif_file):
 
     return cell, atomic_positions, symbols, nat
 
-def cif2qe(cif_file):
+def cif2qe(cif_file, output_dir):
     cell, atomic_positions, symbols, nat = extract_cif_data(cif_file)
     template = """
 &CONTROL
@@ -108,8 +108,6 @@ if __name__ == "__main__":
 
     cif_file = sys.argv[1]
     output_dir = sys.argv[2]
-
-    os.makedirs(output_dir, exist_ok=True)
     cif2qe(cif_file,output_dir)
 
 

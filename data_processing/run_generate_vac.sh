@@ -1,8 +1,8 @@
 #!/bin/bash
 
-INPUT_DIR="/path/to/your/cif/files"
-OUTPUT_DIR="/path/to/output/directory"
-PYTHON_SCRIPT="/path/to/your/python_script.py"
+INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/test_siau3"
+OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/vacancies_siau3/"
+PYTHON_SCRIPT="./generate_vac.py"
 VAC_LOOP=5
 
 mkdir -p "$OUTPUT_DIR"

@@ -12,23 +12,32 @@ def extract_final_atomic_positions(output_file_path):
         content = f.read()
 
     # Regex to match all ATOMIC_POSITIONS blocks
-    pattern = r"ATOMIC_POSITIONS\s+\(.*?\)\n([\s\S]+?)(?=\n\n|$)"
-    matches = re.findall(pattern, content)
+    pattern_pos = r"ATOMIC_POSITIONS\s+\(.*?\)\n([\s\S]+?)(?=\n\n|$)"
+    matches_pos = re.findall(pattern_pos, content)
 
-    if matches:
-        return matches[-1].strip()
+    #Regex to match all CELL_PARAMETERS blocks
+    pattern_cell = r"CELL_PARAMETERS\s+\(.*?\)\n([\s\S]+?)(?=\n\n|$)"
+    matches_cell = re.findall(pattern_cell, content)
+
+    if matches_cell and matches_pos:
+        return matches_pos[-1].strip(), matches_cell[-1].strip()
+    elif matches_pos:
+        return matches_pos[-1].strip()
+
     else:
         raise ValueError("No ATOMIC_POSITIONS block found in the file.")
 
 def update_input(input_file, new_input_dir, type, output_file):
     with open(input_file, 'r') as file:
         content = file.read()
-    positions = extract_final_atomic_positions(output_file)
+    positions, *pos_cell = extract_final_atomic_positions(output_file)
+    cell = pos_cell[0] if pos_cell else None
     content = re.sub(
         r"(ATOMIC_POSITIONS\s+\(.*?\)\n)([\s\S]+?)(?=K_POINTS|$)", 
         f"\\1{positions}\n", 
         content,
     )
+
 # Update positions in input file
 # if vc-md (melt), change calculation and add dt = 20 and nstep = 100, change &IONS to temperature = 'initial', ion_dynamics = beeman, tempw = 2000 and add &CELL and change cell_dynamics - 'pr'
 # if md (quench), change ion_temp = 'reduce-T', delta_t = -34, nraise = 2, and remove &CELL
@@ -89,6 +98,9 @@ def update_input(input_file, new_input_dir, type, output_file):
         # Remove &CELL section if present
         content = re.sub(r"&CELL[\s\S]*?/\n", "", content)
 
+        #update cell_parameters if quench from melt
+        content = re.sub(r"CELL_PARAMETERS\s+angstrom\s*\n([\s\S]+?)(?=\n\n|$)", f"CELL_PARAMETERS angstrom \n\1{cell}\n", content)
+
     else:
         raise ValueError("Invalid type. Supported types are 'vc-md' (melt) and 'md' (quench).")
 
@@ -101,9 +113,9 @@ def update_input(input_file, new_input_dir, type, output_file):
 
 if __name__ == "__main__": 
 
-    output_file =  sys.argv[1]
-    input_file = sys.argv[2]
-    new_input_dir = sys.argv[3]
-    type_of_calculation = sys.argv[4]
+    input_file =  sys.argv[1]
+    new_input_dir = sys.argv[2]
+    type_of_calculation = sys.argv[3]
+    output_file = sys.argv[4]
     
     update_input(input_file,new_input_dir,type_of_calculation,output_file)
