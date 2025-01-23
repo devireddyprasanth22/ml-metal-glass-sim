@@ -1,5 +1,9 @@
 import re
-
+import sys
+import os
+"""
+Script to convert from qe output to melt input or quench input
+"""
 def extract_final_atomic_positions(output_file_path):
     """
     Extracts the atomic positions from the last iteration of a QE output file.
@@ -16,7 +20,7 @@ def extract_final_atomic_positions(output_file_path):
     else:
         raise ValueError("No ATOMIC_POSITIONS block found in the file.")
 
-def update_input(input_file, type,new_input_file, output_file):
+def update_input(input_file, new_input_dir, type, output_file):
     with open(input_file, 'r') as file:
         content = file.read()
     positions = extract_final_atomic_positions(output_file)
@@ -88,19 +92,18 @@ def update_input(input_file, type,new_input_file, output_file):
     else:
         raise ValueError("Invalid type. Supported types are 'vc-md' (melt) and 'md' (quench).")
 
+    filename = os.path.splitext(os.path.basename(input_file))[0]
+    new_input_file = f'{new_input_dir}/{filename}_{type}.in'
     # Write to the new input file
     with open(new_input_file, 'w') as file:
         file.write(content)
 
 
+if __name__ == "__main__": 
 
-output_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_relax.out"  
-input_file_path = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_relax.in"  # Path to the QE input file
-new_input_file = "/Users/dp/Desktop/pawsey/PWscf_cubic/SiAu_melt_test.in"
-type_of_calculation = "melt" 
-
-try:
-    update_input(input_file_path,type_of_calculation,new_input_file,output_file)
-    print(f"QE input file updated for {type_of_calculation} calculation.")
-except ValueError as e:
-    print(f"Error: {e}")
+    output_file =  sys.argv[1]
+    input_file = sys.argv[2]
+    new_input_dir = sys.argv[3]
+    type_of_calculation = sys.argv[4]
+    
+    update_input(input_file,new_input_dir,type_of_calculation,output_file)
