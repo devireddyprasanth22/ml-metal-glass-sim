@@ -3,7 +3,7 @@
 INPUT_DIR=""
 OUTPUT_DIR=""
 PYTHON_SCRIPT="/path/to/your/python_script.py"
-
+mkdir -p "$OUTPUT_DIR"
 for cif_file in "$INPUT_DIR/*.cif"; do
     if [[-f "$cif_file"]]; then
         echo "converting to qe input relaxation $cif_file"
