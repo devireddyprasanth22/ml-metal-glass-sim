@@ -1,5 +1,5 @@
+import sys
 import os
-import re
 from ase.io import read
 import math
 
@@ -32,7 +32,8 @@ def extract_cif_data(cif_file):
 
     return cell, atomic_positions, symbols, nat
 
-def cif2qe(output_file, cell, atomic_positions, symbols, nat):
+def cif2qe(cif_file):
+    cell, atomic_positions, symbols, nat = extract_cif_data(cif_file)
     template = """
 &CONTROL
   calculation = 'vc-relax'
@@ -96,6 +97,8 @@ CELL_PARAMETERS angstrom
         cell_parameters=cell_parameters_str,
     )
 
+    output_file = os.path.splitext(os.path.basename(cif_file))[0]
+    output_file = f'{output_dir}/{output_file}.in'
     # Write to output file
     with open(output_file, 'w') as file:
         file.write(formatted_template)
@@ -103,12 +106,10 @@ CELL_PARAMETERS angstrom
 if __name__ == "__main__":
     # a for loop that will convert all cif files to output files in a dir
 
-    cif_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/beta_lattice.cif"  
-    output_file = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/test.in"  
+    cif_file = sys.argv[1]
+    output_dir = sys.argv[2]
 
-    cell, atomic_positions, symbols, nat = extract_cif_data(cif_file)
+    os.makedirs(output_dir, exist_ok=True)
+    cif2qe(cif_file,output_dir)
 
-    cif2qe(output_file, cell, atomic_positions, symbols, nat)
-
-    print(f"QE input file updated: {output_file}")
 
