@@ -57,5 +57,5 @@ def process_directory(directory_path):
                 print(f"Error processing {file_path}: {e}")
 
 # Specify the directory containing Quantum ESPRESSO input files
-directory_path = "/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/supercell_vacancies"  # Replace with your directory path
+directory_path = "/Users/dp/Desktop/pawsey/pawsey-internship/super_melt/"  # Replace with your directory path
 process_directory(directory_path)

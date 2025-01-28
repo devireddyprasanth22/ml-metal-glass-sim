@@ -33,10 +33,10 @@ def update_input(input_file, new_input_dir, type, output_file):
     positions, *pos_cell = extract_final_atomic_positions(output_file)
     cell = pos_cell[0] if pos_cell else None
     content = re.sub(
-        r"(ATOMIC_POSITIONS\s+\(.*?\)\n)([\s\S]+?)(?=K_POINTS|$)", 
-        f"\\1{positions}\n", 
-        content,
-    )
+    r"(ATOMIC_POSITIONS\s+[\w()]*\n)([\s\S]*?)(?=K_POINTS|$)",
+    f"\\1{positions}\n",
+    content,
+)
 
 # Update positions in input file
 # if vc-md (melt), change calculation and add dt = 20 and nstep = 100, change &IONS to temperature = 'initial', ion_dynamics = beeman, tempw = 2000 and add &CELL and change cell_dynamics - 'pr'
@@ -79,6 +79,10 @@ def update_input(input_file, new_input_dir, type, output_file):
         # Update calculation type
         content = re.sub(r"calculation\s*=\s*['\"].*?['\"]", "calculation = 'md'", content)
 
+        if "ion_dynamics" in content:
+            content = re.sub(r"ion_dynamics\s*=\s*['\"].*?['\"]", "ion_dynamics = 'verlet'", content)
+        else:
+            content = re.sub(r"(\&IONS[\s\S]*?)(\n/)", r"\1\n  ion_dynamics = 'verlet'\2", content)
         # Add or update parameters in &IONS
         if "ion_temperature" in content:
             content = re.sub(r"ion_temperature\s*=\s*['\"].*?['\"]", "ion_temperature = 'reduce-T'", content)
@@ -99,7 +103,7 @@ def update_input(input_file, new_input_dir, type, output_file):
         content = re.sub(r"&CELL[\s\S]*?/\n", "", content)
 
         #update cell_parameters if quench from melt
-        content = re.sub(r"CELL_PARAMETERS\s+angstrom\s*\n([\s\S]+?)(?=\n\n|$)", f"CELL_PARAMETERS angstrom \n\1{cell}\n", content)
+        content = re.sub(r"CELL_PARAMETERS\s+angstrom\s*\n([\s\S]+?)(?=\n\n|$)", f"CELL_PARAMETERS angstrom \n\1   {cell}\n", content)
 
     else:
         raise ValueError("Invalid type. Supported types are 'vc-md' (melt) and 'md' (quench).")
