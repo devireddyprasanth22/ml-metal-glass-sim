@@ -1,0 +1,157 @@
+run: [train, test]
+
+cutoff_radius: 6.0
+chemical_symbols: [Si, Au]
+model_type_names: ${chemical_symbols}
+
+data:
+  _target_: nequip.data.datamodule.ASEDataModule
+  # here we take an ASE-readable file (in extxyz format) and split it into train:val:test = 80:10:10
+  split_dataset:
+    file_path: /scratch/Interns202411/pdev/train_data_siau.xyz
+    train: 0.7
+    val: 0.1
+    test: 0.2
+  seed: 123456
+
+  transforms:
+    - _target_: nequip.data.transforms.NeighborListTransform
+      r_max: ${cutoff_radius}
+    - _target_: nequip.data.transforms.ChemicalSpeciesToAtomTypeMapper
+      chemical_symbols: ${chemical_symbols}
+
+  train_dataloader_kwargs:
+    batch_size: 1
+    shuffle: true
+  val_dataloader_kwargs:
+    batch_size: 1
+  test_dataloader_kwargs: ${data.val_dataloader_kwargs}
+
+  stats_manager:
+    _target_: nequip.data.DataStatisticsManager
+    metrics:
+      - field:
+          _target_: nequip.data.NumNeighbors
+        metric: 
+          _target_: nequip.data.Mean
+        name: num_neighbors_mean
+      - field:
+          _target_: nequip.data.PerAtomModifier
+          field: total_energy
+        metric:
+          _target_: nequip.data.Mean
+        name: per_atom_energy_mean
+      - field: forces
+        metric:
+          _target_: nequip.data.RootMeanSquare
+        per_type: true
+        name: per_type_forces_rms
+
+# `trainer` (mandatory) is a Lightning.Trainer object (https://lightning.ai/docs/pytorch/stable/common/trainer.html#trainer-class-api)
+trainer:
+  _target_: lightning.Trainer
+  max_epochs: 100
+  check_val_every_n_epoch: 1
+  log_every_n_steps: 5
+  callbacks:
+    - _target_: lightning.pytorch.callbacks.ModelCheckpoint
+      dirpath: ${hydra:runtime.output_dir}
+      save_last: true
+    # use EMA for smoother validation curves and thus more reliable metrics for monitoring
+    - _target_: nequip.train.callbacks.NeMoExponentialMovingAverage
+      decay: 0.99
+      every_n_steps: 1
+    - _target_: nequip.train.callbacks.LossCoefficientMonitor
+      interval: epoch
+      frequency: 5
+    - _target_: nequip.train.callbacks.SoftAdapt
+      beta: 1.1         # controls strength of SoftAdapt loss coefficient updates
+      interval: epoch   # update on "epoch" or "batch" basis
+      frequency: 5      # number of intervals (epoch or batches) between SoftAdapt loss coefficient updates
+
+  # use any Lightning supported logger
+  logger:
+    # Lightning wandb logger https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.loggers.wandb.html#module-lightning.pytorch.loggers.wandb
+    _target_: lightning.pytorch.loggers.wandb.WandbLogger
+    project: nequip
+    name: tutorial
+    save_dir: ${hydra:runtime.output_dir}  # use resolver to place wandb logs in hydra's output directory
+
+training_module:
+  _target_: nequip.train.NequIPLightningModule
+  loss:
+    _target_: nequip.train.MetricsManager
+    metrics:
+      - name: force_MSE
+        field: forces
+        coeff: 1
+        metric:
+          _target_: nequip.train.MeanSquaredError
+  val_metrics: 
+    _target_: nequip.train.MetricsManager
+    metrics:
+      - name: force_RMSE
+        field: forces
+        metric:
+          _target_: nequip.train.RootMeanSquaredError
+  test_metrics: ${training_module.val_metrics}
+  optimizer:
+    _target_: torch.optim.Adam
+
+  model:
+    _target_: allegro.model.AllegroModel
+
+    # === basic model params ===
+    seed: 123456
+    model_dtype: float32
+    type_names: ${model_type_names}
+    r_max: ${cutoff_radius}
+
+    # == bessel encoding ==
+    num_bessels: 8
+    bessel_trainable: true
+    polynomial_cutoff_p: 6
+
+    # === symmetry ===
+    l_max: 1
+    parity_setting: o3_full   
+
+    # === allegro layers ===
+    num_layers: 1
+    num_tensor_features: 32
+
+    two_body_latent_kwargs:
+      mlp_latent_dimensions: [32, 64, 128]
+      mlp_nonlinearity: silu
+      mlp_initialization: uniform
+
+    latent_kwargs:
+      mlp_latent_dimensions: [128]
+      mlp_nonlinearity: silu
+      mlp_initialization: uniform
+ 
+    env_embed_kwargs:
+      mlp_latent_dimensions: []
+      mlp_nonlinearity: null
+      mlp_initialization: uniform
+
+    # === edge MLP ===
+    edge_eng_kwargs:
+      mlp_latent_dimensions: [32]
+      mlp_nonlinearity: null
+      mlp_initialization: uniform
+
+    avg_num_neighbors: ${training_data_stats:num_neighbors_mean}
+    per_type_energy_shifts: ${training_data_stats:per_atom_energy_mean}
+    per_type_energy_scales: ${training_data_stats:per_type_forces_rms}
+    per_type_energy_scales_trainable: false
+    per_type_energy_shifts_trainable: false
+
+    pair_potential:
+      _target_: nequip.nn.pair_potential.ZBL
+      units: real
+      chemical_species: ${chemical_symbols}
+
+global_options:
+  seed: 123456
+  allow_tf32: false

@@ -10,19 +10,26 @@ At the base, Nequip is an equivariant graph neural network designed specifically
 * Python >= 3.9
 * PyTorch >= 1.13. (Install pytorch before NequIP to prevent pip from trying to overwrite your PyTorch installation.)
 
+## Input data
+The input data used can be found in `train_data_siau.xyz`.
+
+The format used is `extxyz` which contains not only the cartesian coordinates but also information of the lattice structure, forces and energy. `out2xyz.sh` was used to convert QE outputs to XYZ format
+
+NequIP/Allegro takes in data that is ASE readable. More information can be found [here](https://wiki.fysik.dtu.dk/ase/ase/io/io.html)
+
 ## Process
 For set up, please follow the steps outlined at the [Allegro repository](https://github.com/mir-group/allegro). If working on develop branch, ensure both Allegro and NequIP are clones from develop. This project used the develop branch. Reminder, Allegro and NequIP are under active development, so use the stable releases if unsure
 
 To run:
 `nequip-train -cn example.yaml`
 
-The yaml file used can be found in this directory (ml-model)
+The yaml file used can be found in this directory (siau.yaml)
 
 Model was trained using resources at Setonix
 
 Further information on set up and run can be found [here](https://nequip.readthedocs.io/en/develop/guide/install.html)
 
-
 ## References
-https://maurice-weiler.gitlab.io/blog_post/cnn-book_1_equivariant_networks/
-https://nequip.readthedocs.io/en/develop/guide/install.html
+* https://maurice-weiler.gitlab.io/blog_post/cnn-book_1_equivariant_networks/
+
+* https://nequip.readthedocs.io/en/develop/guide/install.html
