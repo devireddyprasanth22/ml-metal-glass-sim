@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/data"
-out_dir="/Users/dp/Desktop/pawsey/pawsey-internship/data/xyz_inputs"
+INPUT_DIR="/"
+out_dir="/"
 
 for file in "$INPUT_DIR"/*.out; do
     base_name=$(basename "$file" .out)

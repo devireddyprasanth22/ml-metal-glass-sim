@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/SiAu3_112"
-OUTPUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/Crystalline_conf_SiAu/SiAu3_cubic/112_vacs"
+INPUT_DIR="/"
+OUTPUT_DIR="/"
 PYTHON_SCRIPT="./generate_vac.py"
 VAC_LOOP=31
 

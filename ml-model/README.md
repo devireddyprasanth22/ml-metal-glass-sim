@@ -29,6 +29,7 @@ Model was trained using resources at Setonix
 
 Further information on set up and run can be found [here](https://nequip.readthedocs.io/en/develop/guide/install.html)
 
+After training, use `nequip-deploy build` to build and deploy the `pth` file which creates an archive of its trained parameters and metadata (including interatomic potentials)
 ## References
 * https://maurice-weiler.gitlab.io/blog_post/cnn-book_1_equivariant_networks/
 

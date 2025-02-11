@@ -1,8 +1,8 @@
 #!/bin/bash
 
-OUT_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/melts" #the output files from the previous run, corresponfing input files in INP_DIR
-INP_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/melts_in" #the input files that result in out in OUT_DIR
-NEW_INP_DIR="/Users/dp/Desktop/pawsey/pawsey-internship/quench_in" #new inputs will be written to this folder
+OUT_DIR="/" #the output files from the previous run, corresponfing input files in INP_DIR
+INP_DIR="/" #the input files that result in out in OUT_DIR
+NEW_INP_DIR="/" #new inputs will be written to this folder
 TYPE="quench" #melt or quench
 PYTHON_SCRIPT="./out2in.py"
 

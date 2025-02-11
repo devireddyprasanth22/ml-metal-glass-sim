@@ -1,0 +1,1 @@
+# LAMMPS for MD simulation
