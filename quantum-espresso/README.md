@@ -1,9 +1,11 @@
 # Quantum Espresso
 Quantum Espresso (QE) is an open-source suite of programs for quantum mechanical materials modeling based on density functional theory (DFT), plane waves, and pseudopotentials.
 
-This folder contains the input files for QE dft calculations for amorphous SiAu. Crystalline structure can be found at [Materials Project](https://next-gen.materialsproject.org/materials/mp-1186998?chemsys=Au-Si) and is converted to QE input using [this](https://qeinputgenerator.materialscloud.io). Furthermore, scipts used to process various inputs to outputs can be found on quantum-espresso/data-proc 
+This folder contains the input files for QE dft calculations for amorphous SiAu. Crystalline structure can be found at [Materials Project](https://next-gen.materialsproject.org/materials/mp-1186998?chemsys=Au-Si) and is converted to QE input using [this](https://qeinputgenerator.materialscloud.io). Furthermore, scipts used to process various inputs to outputs can be found on `quantum-espresso/data-proc` 
 
 Cif files can be visualised using VESTA, which was also used to create supercells and strained structures
+
+Some sample data can be found in `/data` (not complete data), and `/pseudo` contains the pseudopotentials for gold and silicon seperately which was used in DFT
 
 ## Process of Crystalline -> Amorphous
 
