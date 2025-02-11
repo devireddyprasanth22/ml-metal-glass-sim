@@ -23,7 +23,7 @@ For set up, please follow the steps outlined at the [Allegro repository](https:/
 To run:
 `nequip-train -cn example.yaml`
 
-The yaml file used can be found in this directory (siau.yaml)
+The yaml file used can be found in this directory (`siau.yaml`)
 
 Model was trained using resources at Setonix
 

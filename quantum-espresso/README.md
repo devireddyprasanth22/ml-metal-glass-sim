@@ -14,3 +14,5 @@ One of the processes that is applied to generate metallic glasses is a melt-quen
 ## Process on Quantum Espresso
 On QE, for each configuration, we had three input files: relaxation, melt and quench. Some scripts in quantum-espresso/data-proc were used to automate the process. Resources at pawsey were used to run these simulations. Ensure that each run is able to access the pseduopotentials. The planewave function was used and the srun command on the cluster allowed for MPI parallelizationx
 `srun -n 32 pw.x < input file &> output file &`
+
+More information on input file description can be found [here](https://www.quantum-espresso.org/Doc/INPUT_PW.html)
