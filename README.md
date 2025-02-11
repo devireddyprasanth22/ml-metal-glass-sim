@@ -1,5 +1,5 @@
 # Machine learning for simulating formation of metallic glasses
-This repository documents the process, data, and scripts used to apply machine learning techniques for simulating the formation of metallic glasses, specifically Gold-Silicon, as part of my Pawsey 2024 Summer internship. 
+This repository documents the process, data, and scripts used to apply machine learning techniques for simulating the formation of metallic glasses, specifically Gold-Silicon, as part of my Pawsey internship. 
 
 ## Introduction
 
