@@ -3,6 +3,8 @@ Quantum Espresso (QE) is an open-source suite of programs for quantum mechanical
 
 This folder contains the input files for QE dft calculations for amorphous SiAu. Crystalline structure can be found at [Materials Project](https://next-gen.materialsproject.org/materials/mp-1186998?chemsys=Au-Si) and is converted to QE input using [this](https://qeinputgenerator.materialscloud.io). Furthermore, scipts used to process various inputs to outputs can be found on quantum-espresso/data-proc 
 
+Cif files can be visualised using VESTA, which was also used to create supercells and strained structures
+
 ## Process of Crystalline -> Amorphous
 
 One of the processes that is applied to generate metallic glasses is a melt-quench technique, and this is the technique used in the project. This method involves heating a metallic alloy to a molten state and then rapidly cooling it at a rate high enough to prevent the formation of a crystalline structure. The rapid cooling locks the atoms in a disordered, amorphous state, forming a metallic glass.
