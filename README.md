@@ -11,3 +11,7 @@ This repository is broken into 3 sections:
 - quantum-espresso which contains data and process employed for generating amorphous structures for training ML model
 - ml-model which includes details of the ml model employed and the steps required for set-up
 - lammps-md which includes details of set up and process employed to simulating structures using interatomic potentials
+
+
+## Project Poster
+![Project](/images/prasanth_devireddy-Poster.png "Project Poster")
